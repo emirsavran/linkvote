@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
-  AppBar, Container, CssBaseline, Toolbar, Typography,
+  AppBar, Box, Container, CssBaseline, Toolbar, Typography,
 } from '@material-ui/core';
 
 function Layout({ children }) {
@@ -15,8 +15,10 @@ function Layout({ children }) {
           </Typography>
         </Toolbar>
       </AppBar>
-      <Container maxWidth="md">
-        {children}
+      <Container component="main" maxWidth="sm">
+        <Box py={3}>
+          {children}
+        </Box>
       </Container>
     </>
   );
