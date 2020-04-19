@@ -5,6 +5,8 @@ import {
 } from '@material-ui/core';
 import { ArrowUpward, ArrowDownward, RemoveCircleOutline } from '@material-ui/icons';
 
+import { useLinkContext, removeLink } from '../LinkContext';
+
 const useStyles = makeStyles((theme) => ({
   card: {
     backgroundColor: 'transparent',
@@ -48,12 +50,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ListItem({ name, url }) {
+function ListItem({ id, name, url }) {
   const classes = useStyles();
+  const { dispatch } = useLinkContext();
 
   return (
     <Card className={classes.card} elevation={0} variant="outlined">
-      <IconButton className={classes.removeButton} aria-label="remove link">
+      <IconButton className={classes.removeButton} aria-label="remove link" onClick={() => dispatch(removeLink(id))}>
         <RemoveCircleOutline color="error" />
       </IconButton>
       <Paper elevation={0} variant="outlined" className={classes.pointBox}>
@@ -83,6 +86,7 @@ function ListItem({ name, url }) {
 }
 
 ListItem.propTypes = {
+  id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
 };

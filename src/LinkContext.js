@@ -1,18 +1,23 @@
+/* eslint-disable quote-props */
 import React, { createContext, useReducer, useContext } from 'react';
 import PropTypes from 'prop-types';
+import { nanoid } from 'nanoid';
 
 const LinkContext = createContext();
 
-const initialState = [
-  { name: 'Hacker News', url: 'https://news.ycombinator.com' },
-  { name: 'Google', url: 'https://google.com' },
-  { name: 'Product Hunt', url: 'https://producthunt.com' },
-  { name: 'REDDIT', url: 'https://reddit.com' },
-  { name: 'Hepsi Burada', url: 'https://hepsiburada.com' },
-  { name: 'Twitter', url: 'https://twitter.com' },
-  { name: 'Instagram', url: 'https://instagram.com' },
-  { name: 'GitHub', url: 'https://github.com' },
-];
+const initialState = {
+  byId: {
+    'lCMBQOL': { id: 'lCMBQOL', name: 'Hacker News', url: 'https://news.ycombinator.com' },
+    'wCiNNW0': { id: 'wCiNNW0', name: 'Google', url: 'https://google.com' },
+    'jYj0Axf': { id: 'jYj0Axf', name: 'Product Hunt', url: 'https://producthunt.com' },
+    'CIuEK8-': { id: 'CIuEK8-', name: 'REDDIT', url: 'https://reddit.com' },
+    'z8uu8Lo': { id: 'z8uu8Lo', name: 'Hepsi Burada', url: 'https://hepsiburada.com' },
+    '6twbBEZ': { id: '6twbBEZ', name: 'Twitter', url: 'https://twitter.com' },
+    'neywAqn': { id: 'neywAqn', name: 'Instagram', url: 'https://instagram.com' },
+    'ondvt7t': { id: 'ondvt7t', name: 'GitHub', url: 'https://github.com' },
+  },
+  allIds: ['lCMBQOL', 'wCiNNW0', 'jYj0Axf', 'CIuEK8-', 'z8uu8Lo', '6twbBEZ', 'neywAqn', 'ondvt7t'],
+};
 
 // Actions
 const ADD_LINK = 'ADD_LINK';
@@ -22,7 +27,8 @@ const DOWNVOTE_LINK = 'DOWNVOTE_LINK';
 
 // Action Creators
 export function addLink(name, url) {
-  return { type: ADD_LINK, payload: { name, url } };
+  const id = nanoid(7);
+  return { type: ADD_LINK, payload: { id, name, url } };
 }
 
 export function removeLink(id) {
@@ -38,11 +44,24 @@ export function downvoteLink(id) {
 }
 
 function linkReducer(state, action) {
-  const { type } = action;
+  const { type, payload } = action;
+  const { id } = payload;
   switch (type) {
     case ADD_LINK:
-    case REMOVE_LINK:
-    case UPVOTE_LINK:
+      return {
+        byId: {
+          ...state.byId,
+          [id]: payload,
+        },
+        allIds: [id, ...state.allIds],
+      };
+    case REMOVE_LINK: {
+      const { [id]: toBeRemoved, ...rest } = state.byId;
+      return {
+        byId: rest,
+        allIds: state.allIds.filter((anyId) => anyId !== id),
+      };
+    } case UPVOTE_LINK:
     case DOWNVOTE_LINK:
     default:
       return state;

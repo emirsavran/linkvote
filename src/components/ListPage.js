@@ -55,7 +55,7 @@ function ListPage() {
           <MenuItem value={2}>Less Voted (1 &#8594; 10)</MenuItem>
         </Select>
       </FormControl>
-      <List data={linkContext.links} />
+      <List data={linkContext.links.byId} order={linkContext.links.allIds} />
     </>
   );
 }
