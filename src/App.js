@@ -2,7 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
 import Layout from './components/Layout';
-import LinkListPage from './components/LinkListPage';
+import ListPage from './components/ListPage';
 import LinkSubmitPage from './components/LinkSubmitPage';
 
 function App() {
@@ -11,7 +11,7 @@ function App() {
       <Layout>
         <Switch>
           <Route exact path="/">
-            <LinkListPage />
+            <ListPage />
           </Route>
           <Route path="/new">
             <LinkSubmitPage />

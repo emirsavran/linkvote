@@ -42,10 +42,10 @@ function ListItem({ name, url }) {
       <Box>
         <CardContent>
           <Typography gutterBottom variant="h5" component="h2">
-            Hacker News
+            {name}
           </Typography>
           <Typography variant="body2" color="textSecondary" component="h3">
-            (https://news.ycombinator.com/)
+            {`(${url})`}
           </Typography>
         </CardContent>
         <CardActions className={classes.actions}>
