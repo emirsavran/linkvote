@@ -1,9 +1,13 @@
 /* eslint-disable quote-props */
-import React, { createContext, useReducer, useContext } from 'react';
+import React, {
+  createContext, useReducer, useContext, useEffect,
+} from 'react';
 import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
 
 const LinkContext = createContext();
+
+const localState = JSON.parse(localStorage.getItem('links'));
 
 const initialState = {
   byId: {
@@ -69,7 +73,11 @@ function linkReducer(state, action) {
 }
 
 function LinkProvider({ children }) {
-  const [links, dispatch] = useReducer(linkReducer, initialState);
+  const [links, dispatch] = useReducer(linkReducer, localState || initialState);
+
+  useEffect(() => {
+    localStorage.setItem('links', JSON.stringify(links));
+  }, [links]);
 
   return <LinkContext.Provider value={{ links, dispatch }}>{children}</LinkContext.Provider>;
 }
