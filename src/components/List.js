@@ -5,7 +5,9 @@ import {
 } from '@material-ui/core';
 import { Alert, Pagination } from '@material-ui/lab';
 
-import { useLinkContext, removeLink } from '../LinkContext';
+import {
+  useLinkContext, removeLink, upvoteLink, downvoteLink,
+} from '../LinkContext';
 
 import ListItem from './ListItem';
 
@@ -42,6 +44,14 @@ function List({ data, order }) {
     }
   }, [currentPage, order]);
 
+  const handleUpvoteClick = (id) => {
+    dispatch(upvoteLink(id));
+  };
+
+  const handleDownvoteClick = (id) => {
+    dispatch(downvoteLink(id));
+  };
+
   const handleRemoveClick = (id, name) => {
     setToBeRemovedLink({ id, name });
     setIsDialogOpen(true);
@@ -66,9 +76,12 @@ function List({ data, order }) {
           <ListItem
             key={id}
             onRemoveClick={handleRemoveClick}
+            onUpvoteClick={handleUpvoteClick}
+            onDownvoteClick={handleDownvoteClick}
             id={id}
             name={data[id].name}
             url={data[id].url}
+            vote={data[id].vote}
           />
         ) : null))}
         {pageCount > 1 && (
@@ -118,6 +131,7 @@ List.propTypes = {
     id: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
+    vote: PropTypes.number.isRequired,
   })).isRequired,
   order: PropTypes.arrayOf(PropTypes.string).isRequired,
 };

@@ -49,12 +49,20 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ListItem({
-  id, name, url, onRemoveClick,
+  id, name, url, vote, onRemoveClick, onUpvoteClick, onDownvoteClick,
 }) {
   const classes = useStyles();
 
   const handleRemoveClick = () => {
     onRemoveClick(id, name);
+  };
+
+  const handleUpvoteClick = () => {
+    onUpvoteClick(id);
+  };
+
+  const handleDownvoteClick = () => {
+    onDownvoteClick(id);
   };
 
   return (
@@ -68,7 +76,7 @@ function ListItem({
           <RemoveCircleOutline color="error" />
         </IconButton>
         <Paper elevation={0} variant="outlined" className={classes.pointBox}>
-          <Typography variant="h3">6</Typography>
+          <Typography variant="h3">{vote}</Typography>
           <Typography>Points</Typography>
         </Paper>
         <Box>
@@ -81,10 +89,10 @@ function ListItem({
             </Typography>
           </CardContent>
           <CardActions className={classes.actions}>
-            <Button color="primary" startIcon={<ArrowUpward />}>
+            <Button color="primary" startIcon={<ArrowUpward />} onClick={handleUpvoteClick}>
               Up Vote
             </Button>
-            <Button color="primary" startIcon={<ArrowDownward />}>
+            <Button color="primary" startIcon={<ArrowDownward />} onClick={handleDownvoteClick}>
               Down Vote
             </Button>
           </CardActions>
@@ -98,7 +106,10 @@ ListItem.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
+  vote: PropTypes.number.isRequired,
   onRemoveClick: PropTypes.func.isRequired,
+  onUpvoteClick: PropTypes.func.isRequired,
+  onDownvoteClick: PropTypes.func.isRequired,
 };
 
 export default ListItem;

@@ -11,14 +11,54 @@ const localState = JSON.parse(localStorage.getItem('links'));
 
 const initialState = {
   byId: {
-    'lCMBQOL': { id: 'lCMBQOL', name: 'Hacker News', url: 'https://news.ycombinator.com' },
-    'wCiNNW0': { id: 'wCiNNW0', name: 'Google', url: 'https://google.com' },
-    'jYj0Axf': { id: 'jYj0Axf', name: 'Product Hunt', url: 'https://producthunt.com' },
-    'CIuEK8-': { id: 'CIuEK8-', name: 'REDDIT', url: 'https://reddit.com' },
-    'z8uu8Lo': { id: 'z8uu8Lo', name: 'Hepsi Burada', url: 'https://hepsiburada.com' },
-    '6twbBEZ': { id: '6twbBEZ', name: 'Twitter', url: 'https://twitter.com' },
-    'neywAqn': { id: 'neywAqn', name: 'Instagram', url: 'https://instagram.com' },
-    'ondvt7t': { id: 'ondvt7t', name: 'GitHub', url: 'https://github.com' },
+    'lCMBQOL': {
+      id: 'lCMBQOL',
+      name: 'Hacker News',
+      url: 'https://news.ycombinator.com',
+      vote: 8,
+    },
+    'wCiNNW0': {
+      id: 'wCiNNW0',
+      name: 'Google',
+      url: 'https://google.com',
+      vote: 7,
+    },
+    'jYj0Axf': {
+      id: 'jYj0Axf',
+      name: 'Product Hunt',
+      url: 'https://producthunt.com',
+      vote: 6,
+    },
+    'CIuEK8-': {
+      id: 'CIuEK8-',
+      name: 'REDDIT',
+      url: 'https://reddit.com',
+      vote: 9,
+    },
+    'z8uu8Lo': {
+      id: 'z8uu8Lo',
+      name: 'Hepsi Burada',
+      url: 'https://hepsiburada.com',
+      vote: 5,
+    },
+    '6twbBEZ': {
+      id: '6twbBEZ',
+      name: 'Twitter',
+      url: 'https://twitter.com',
+      vote: 2,
+    },
+    'neywAqn': {
+      id: 'neywAqn',
+      name: 'Instagram',
+      url: 'https://instagram.com',
+      vote: 1,
+    },
+    'ondvt7t': {
+      id: 'ondvt7t',
+      name: 'GitHub',
+      url: 'https://github.com',
+      vote: 10,
+    },
   },
   allIds: ['lCMBQOL', 'wCiNNW0', 'jYj0Axf', 'CIuEK8-', 'z8uu8Lo', '6twbBEZ', 'neywAqn', 'ondvt7t'],
 };
@@ -65,9 +105,31 @@ function linkReducer(state, action) {
         byId: rest,
         allIds: state.allIds.filter((anyId) => anyId !== id),
       };
-    } case UPVOTE_LINK:
-    case DOWNVOTE_LINK:
-    default:
+    } case UPVOTE_LINK: {
+      const { [id]: toBeIncremented, ...rest } = state.byId;
+      return {
+        ...state,
+        byId: {
+          ...rest,
+          [id]: {
+            ...toBeIncremented,
+            vote: toBeIncremented.vote + 1,
+          },
+        },
+      };
+    } case DOWNVOTE_LINK: {
+      const { [id]: toBeDecremented, ...rest } = state.byId;
+      return {
+        ...state,
+        byId: {
+          ...rest,
+          [id]: {
+            ...toBeDecremented,
+            vote: toBeDecremented.vote - 1,
+          },
+        },
+      };
+    } default:
       return state;
   }
 }
