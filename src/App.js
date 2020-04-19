@@ -1,6 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 
+import { LinkProvider } from './LinkContext';
+
 import Layout from './components/Layout';
 import ListPage from './components/ListPage';
 import LinkSubmitPage from './components/LinkSubmitPage';
@@ -8,19 +10,21 @@ import LinkSubmitPage from './components/LinkSubmitPage';
 function App() {
   return (
     <Router>
-      <Layout>
-        <Switch>
-          <Route exact path="/">
-            <ListPage />
-          </Route>
-          <Route path="/new">
-            <LinkSubmitPage />
-          </Route>
-          <Route path="*">
-            <p>Not Found</p>
-          </Route>
-        </Switch>
-      </Layout>
+      <LinkProvider>
+        <Layout>
+          <Switch>
+            <Route exact path="/">
+              <ListPage />
+            </Route>
+            <Route path="/new">
+              <LinkSubmitPage />
+            </Route>
+            <Route path="*">
+              <p>Not Found</p>
+            </Route>
+          </Switch>
+        </Layout>
+      </LinkProvider>
     </Router>
   );
 }

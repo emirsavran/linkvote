@@ -5,18 +5,9 @@ import {
 } from '@material-ui/core';
 import { Add } from '@material-ui/icons';
 
-import List from './List';
+import { useLinkContext } from '../LinkContext';
 
-const data = [
-  { name: 'Hacker News', url: 'https://news.ycombinator.com' },
-  { name: 'Google', url: 'https://google.com' },
-  { name: 'Product Hunt', url: 'https://producthunt.com' },
-  { name: 'REDDIT', url: 'https://reddit.com' },
-  { name: 'Hepsi Burada', url: 'https://hepsiburada.com' },
-  { name: 'Twitter', url: 'https://twitter.com' },
-  { name: 'Instagram', url: 'https://instagram.com' },
-  { name: 'GitHub', url: 'https://github.com' },
-];
+import List from './List';
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -30,6 +21,7 @@ const useStyles = makeStyles((theme) => ({
 function ListPage() {
   const classes = useStyles();
   const [orderBy, setOrderBy] = useState(0);
+  const linkContext = useLinkContext();
 
   const handleOrderChange = (e) => {
     setOrderBy(e.target.value);
@@ -63,7 +55,7 @@ function ListPage() {
           <MenuItem value={2}>Less Voted (1 &#8594; 10)</MenuItem>
         </Select>
       </FormControl>
-      <List data={data} />
+      <List data={linkContext.links} />
     </>
   );
 }
