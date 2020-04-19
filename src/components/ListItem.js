@@ -5,8 +5,6 @@ import {
 } from '@material-ui/core';
 import { ArrowUpward, ArrowDownward, RemoveCircleOutline } from '@material-ui/icons';
 
-import { useLinkContext, removeLink } from '../LinkContext';
-
 const useStyles = makeStyles((theme) => ({
   card: {
     backgroundColor: 'transparent',
@@ -50,38 +48,49 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ListItem({ id, name, url }) {
+function ListItem({
+  id, name, url, onRemoveClick,
+}) {
   const classes = useStyles();
-  const { dispatch } = useLinkContext();
+
+  const handleRemoveClick = () => {
+    onRemoveClick(id, name);
+  };
 
   return (
-    <Card className={classes.card} elevation={0} variant="outlined">
-      <IconButton className={classes.removeButton} aria-label="remove link" onClick={() => dispatch(removeLink(id))}>
-        <RemoveCircleOutline color="error" />
-      </IconButton>
-      <Paper elevation={0} variant="outlined" className={classes.pointBox}>
-        <Typography variant="h3">6</Typography>
-        <Typography>Points</Typography>
-      </Paper>
-      <Box>
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="h2">
-            {name}
-          </Typography>
-          <Typography variant="body2" color="textSecondary" component="h3">
-            {`(${url})`}
-          </Typography>
-        </CardContent>
-        <CardActions className={classes.actions}>
-          <Button color="primary" startIcon={<ArrowUpward />}>
-            Up Vote
-          </Button>
-          <Button color="primary" startIcon={<ArrowDownward />}>
-            Down Vote
-          </Button>
-        </CardActions>
-      </Box>
-    </Card>
+    <>
+      <Card className={classes.card} elevation={0} variant="outlined">
+        <IconButton
+          className={classes.removeButton}
+          aria-label="remove link"
+          onClick={handleRemoveClick}
+        >
+          <RemoveCircleOutline color="error" />
+        </IconButton>
+        <Paper elevation={0} variant="outlined" className={classes.pointBox}>
+          <Typography variant="h3">6</Typography>
+          <Typography>Points</Typography>
+        </Paper>
+        <Box>
+          <CardContent>
+            <Typography gutterBottom variant="h5" component="h2">
+              {name}
+            </Typography>
+            <Typography variant="body2" color="textSecondary" component="h3">
+              {`(${url})`}
+            </Typography>
+          </CardContent>
+          <CardActions className={classes.actions}>
+            <Button color="primary" startIcon={<ArrowUpward />}>
+              Up Vote
+            </Button>
+            <Button color="primary" startIcon={<ArrowDownward />}>
+              Down Vote
+            </Button>
+          </CardActions>
+        </Box>
+      </Card>
+    </>
   );
 }
 
@@ -89,6 +98,7 @@ ListItem.propTypes = {
   id: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
+  onRemoveClick: PropTypes.func.isRequired,
 };
 
 export default ListItem;
