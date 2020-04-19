@@ -5,7 +5,7 @@ import { LinkProvider } from './LinkContext';
 
 import Layout from './components/Layout';
 import ListPage from './components/ListPage';
-import LinkSubmitPage from './components/LinkSubmitPage';
+import SubmitPage from './components/SubmitPage';
 
 function App() {
   return (
@@ -17,7 +17,7 @@ function App() {
               <ListPage />
             </Route>
             <Route path="/new">
-              <LinkSubmitPage />
+              <SubmitPage />
             </Route>
             <Route path="*">
               <p>Not Found</p>
