@@ -72,10 +72,10 @@ const initialState = {
 };
 
 // Actions
-const ADD_LINK = 'ADD_LINK';
-const REMOVE_LINK = 'REMOVE_LINK';
-const UPVOTE_LINK = 'UPVOTE_LINK';
-const DOWNVOTE_LINK = 'DOWNVOTE_LINK';
+export const ADD_LINK = 'ADD_LINK';
+export const REMOVE_LINK = 'REMOVE_LINK';
+export const UPVOTE_LINK = 'UPVOTE_LINK';
+export const DOWNVOTE_LINK = 'DOWNVOTE_LINK';
 
 // Action Creators
 export function addLink(name, url) {
@@ -104,11 +104,11 @@ export function downvoteLink(id) {
   return { type: DOWNVOTE_LINK, payload: { id, lastVotedAt } };
 }
 
-function linkReducer(state, action) {
+export function linkReducer(state, action) {
   const { type, payload } = action;
-  const { id } = payload;
   switch (type) {
-    case ADD_LINK:
+    case ADD_LINK: {
+      const { id } = payload;
       return {
         byId: {
           ...state.byId,
@@ -116,13 +116,15 @@ function linkReducer(state, action) {
         },
         allIds: [id, ...state.allIds],
       };
-    case REMOVE_LINK: {
+    } case REMOVE_LINK: {
+      const { id } = payload;
       const { [id]: toBeRemoved, ...rest } = state.byId;
       return {
         byId: rest,
         allIds: state.allIds.filter((anyId) => anyId !== id),
       };
     } case UPVOTE_LINK: {
+      const { id } = payload;
       const { [id]: toBeIncremented, ...rest } = state.byId;
       return {
         ...state,
@@ -136,6 +138,7 @@ function linkReducer(state, action) {
         },
       };
     } case DOWNVOTE_LINK: {
+      const { id } = payload;
       const { [id]: toBeDecremented, ...rest } = state.byId;
       return {
         ...state,
