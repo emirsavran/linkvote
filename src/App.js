@@ -9,7 +9,7 @@ import SubmitPage from './components/SubmitPage';
 
 function App() {
   return (
-    <Router>
+    <Router basename="/linkvote">
       <LinkProvider>
         <Layout>
           <Switch>

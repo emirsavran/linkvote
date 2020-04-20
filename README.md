@@ -1,6 +1,6 @@
 # LinkVOTE Challenge
 
-This is a simple app to record links and vote them using localStorage API. This project is built with [React](https://reactjs.org/) and [Material-UI](https://material-ui.com/).
+This is a simple app to record links and vote them using localStorage API. Working demo can be found [here](https://emirsavran.com/linkvote). This project is built with [React](https://reactjs.org/) and [Material-UI](https://material-ui.com/).
 
 ## Known Issues and Deficiencies
 
