@@ -21,7 +21,13 @@ const useStyles = makeStyles((theme) => ({
 function ListPage() {
   const classes = useStyles();
   const [orderBy, setOrderBy] = useState(0);
-  const linkContext = useLinkContext();
+  const { links } = useLinkContext();
+
+  const orderArray = () => {
+    const { allIds, mostVoted, lessVoted } = links;
+    const arrays = [allIds, mostVoted, lessVoted];
+    return arrays[orderBy];
+  };
 
   const handleOrderChange = (e) => {
     setOrderBy(e.target.value);
@@ -55,7 +61,7 @@ function ListPage() {
           <MenuItem value={2}>Less Voted (1 &#8594; 10)</MenuItem>
         </Select>
       </FormControl>
-      <List data={linkContext.links.byId} order={linkContext.links.allIds} />
+      <List data={links.byId} order={orderArray()} />
     </>
   );
 }

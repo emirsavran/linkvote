@@ -1,6 +1,6 @@
 /* eslint-disable quote-props */
 import React, {
-  createContext, useReducer, useContext, useEffect,
+  createContext, useReducer, useContext, useEffect, useMemo,
 } from 'react';
 import PropTypes from 'prop-types';
 import { nanoid } from 'nanoid';
@@ -16,48 +16,56 @@ const initialState = {
       name: 'Hacker News',
       url: 'https://news.ycombinator.com',
       vote: 8,
+      lastVotedAt: 1587378056668,
     },
     'wCiNNW0': {
       id: 'wCiNNW0',
       name: 'Google',
       url: 'https://google.com',
       vote: 7,
+      lastVotedAt: 1587378066668,
     },
     'jYj0Axf': {
       id: 'jYj0Axf',
       name: 'Product Hunt',
       url: 'https://producthunt.com',
       vote: 6,
+      lastVotedAt: 1587378076668,
     },
     'CIuEK8-': {
       id: 'CIuEK8-',
       name: 'REDDIT',
       url: 'https://reddit.com',
       vote: 9,
+      lastVotedAt: 1587378086668,
     },
     'z8uu8Lo': {
       id: 'z8uu8Lo',
       name: 'Hepsi Burada',
       url: 'https://hepsiburada.com',
       vote: 5,
+      lastVotedAt: 1587378096668,
     },
     '6twbBEZ': {
       id: '6twbBEZ',
       name: 'Twitter',
       url: 'https://twitter.com',
       vote: 2,
+      lastVotedAt: 1587378106668,
     },
     'neywAqn': {
       id: 'neywAqn',
       name: 'Instagram',
       url: 'https://instagram.com',
       vote: 1,
+      lastVotedAt: 1587378116668,
     },
     'ondvt7t': {
       id: 'ondvt7t',
       name: 'GitHub',
       url: 'https://github.com',
       vote: 10,
+      lastVotedAt: 1587378126668,
     },
   },
   allIds: ['lCMBQOL', 'wCiNNW0', 'jYj0Axf', 'CIuEK8-', 'z8uu8Lo', '6twbBEZ', 'neywAqn', 'ondvt7t'],
@@ -72,7 +80,14 @@ const DOWNVOTE_LINK = 'DOWNVOTE_LINK';
 // Action Creators
 export function addLink(name, url) {
   const id = nanoid(7);
-  return { type: ADD_LINK, payload: { id, name, url } };
+  const lastVotedAt = Date.now();
+
+  return {
+    type: ADD_LINK,
+    payload: {
+      id, name, url, vote: 0, lastVotedAt,
+    },
+  };
 }
 
 export function removeLink(id) {
@@ -80,11 +95,13 @@ export function removeLink(id) {
 }
 
 export function upvoteLink(id) {
-  return { type: UPVOTE_LINK, payload: { id } };
+  const lastVotedAt = Date.now();
+  return { type: UPVOTE_LINK, payload: { id, lastVotedAt } };
 }
 
 export function downvoteLink(id) {
-  return { type: DOWNVOTE_LINK, payload: { id } };
+  const lastVotedAt = Date.now();
+  return { type: DOWNVOTE_LINK, payload: { id, lastVotedAt } };
 }
 
 function linkReducer(state, action) {
@@ -114,6 +131,7 @@ function linkReducer(state, action) {
           [id]: {
             ...toBeIncremented,
             vote: toBeIncremented.vote + 1,
+            lastVotedAt: payload.lastVotedAt,
           },
         },
       };
@@ -126,6 +144,7 @@ function linkReducer(state, action) {
           [id]: {
             ...toBeDecremented,
             vote: toBeDecremented.vote - 1,
+            lastVotedAt: payload.lastVotedAt,
           },
         },
       };
@@ -134,14 +153,37 @@ function linkReducer(state, action) {
   }
 }
 
+function sortLinksByVote(links) {
+  return [...links.allIds].sort((a, b) => {
+    const first = links.byId[a];
+    const second = links.byId[b];
+
+    if (first.vote > second.vote) return -1;
+    if (first.vote < second.vote) return 1;
+
+    // if their votes are equal then check lastVotedAt
+    if (first.lastVotedAt < second.lastVotedAt) return 1;
+    return -1;
+  });
+}
+
 function LinkProvider({ children }) {
   const [links, dispatch] = useReducer(linkReducer, localState || initialState);
+  const state = useMemo(() => {
+    const mostVoted = sortLinksByVote(links);
+    const lessVoted = [...mostVoted].reverse();
+    return {
+      ...links,
+      mostVoted,
+      lessVoted,
+    };
+  }, [links]);
 
   useEffect(() => {
     localStorage.setItem('links', JSON.stringify(links));
   }, [links]);
 
-  return <LinkContext.Provider value={{ links, dispatch }}>{children}</LinkContext.Provider>;
+  return <LinkContext.Provider value={{ links: state, dispatch }}>{children}</LinkContext.Provider>;
 }
 
 LinkProvider.propTypes = {
