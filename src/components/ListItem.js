@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import PropTypes from 'prop-types';
 import {
   Button, Card, CardActions, CardContent, Typography, makeStyles, Box, Paper, IconButton,
@@ -112,4 +112,4 @@ ListItem.propTypes = {
   onDownvoteClick: PropTypes.func.isRequired,
 };
 
-export default ListItem;
+export default memo(ListItem);

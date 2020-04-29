@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
 import {
   Typography, makeStyles, Box, Button, Dialog, DialogTitle, DialogActions, Snackbar,
@@ -44,24 +44,24 @@ function List({ data, order }) {
     }
   }, [currentPage, order]);
 
-  const handleUpvoteClick = (id) => {
+  const handleUpvoteClick = useCallback((id) => {
     dispatch(upvoteLink(id));
-  };
+  }, [dispatch]);
 
-  const handleDownvoteClick = (id) => {
+  const handleDownvoteClick = useCallback((id) => {
     dispatch(downvoteLink(id));
-  };
+  }, [dispatch]);
 
-  const handleRemoveClick = (id, name) => {
+  const handleRemoveClick = useCallback((id, name) => {
     setToBeRemovedLink({ id, name });
     setIsDialogOpen(true);
-  };
+  }, []);
 
-  const handleRemoveConfirm = () => {
+  const handleRemoveConfirm = useCallback(() => {
     setIsDialogOpen(false);
     dispatch(removeLink(toBeRemovedLink.id));
     setIsSnackbarOpen(true);
-  };
+  }, [dispatch, toBeRemovedLink]);
 
   if (order.length === 0) {
     return (
